@@ -20,7 +20,7 @@ target/
 /lib/
 
 
-/src/main/java/com/chitts/dao/
+
 /src/main/java/com/chitts/dto/
 /src/main/java/com/chitts/dto/builder/
 /src/main/java/com/chitts/dto/impl/
@@ -28,10 +28,6 @@ target/
 /src/main/java/com/chitts/dto/impl/Gender.java
 /src/main/java/com/chitts/dto/Model.java
 /src/main/java/com/chitts/exceptions/
-/src/main/java/com/chitts/rest/
-/src/main/java/com/chitts/rest/EmployeeController.java
-/src/main/java/com/chitts/rest/EmployeesController.java
-/src/main/java/com/chitts/rest/MainController.java
 /src/main/java/com/chitts/service/
 /src/main/java/com/chitts/Main.java
 /src/main/webapp/WEB-INF/views/
