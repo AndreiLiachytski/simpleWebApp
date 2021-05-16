@@ -18,16 +18,3 @@ log/
 target/
 /out/
 /lib/
-
-
-
-/src/main/java/com/chitts/dto/
-/src/main/java/com/chitts/dto/builder/
-/src/main/java/com/chitts/dto/impl/
-/src/main/java/com/chitts/dto/impl/Employee.java
-/src/main/java/com/chitts/dto/impl/Gender.java
-/src/main/java/com/chitts/dto/Model.java
-/src/main/java/com/chitts/exceptions/
-/src/main/java/com/chitts/service/
-/src/main/java/com/chitts/Main.java
-/src/main/webapp/WEB-INF/views/
