@@ -1,4 +1,4 @@
-package com.mastery.java.task.dto;
+package com.chitts.models;
 
 public enum Gender {
     MALE,

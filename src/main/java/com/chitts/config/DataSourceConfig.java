@@ -2,33 +2,33 @@ package com.chitts.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Objects;
 
 @Configuration
 @PropertySource({"classpath:dataBase.properties"})
-@ComponentScan({"com.chitts"})
-@Component
-public class ConnectionPool {
+public class DataSourceConfig {
+
+    private final Environment env;
 
     @Autowired
-    private Environment env;
+    public DataSourceConfig(Environment env) {
+        this.env = env;
+    }
 
     @Bean
-    public Connection getConnection() throws SQLException {
-        return getDataSource().getConnection();
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }
+
     @Bean
-    public DataSource getDataSource() {
+    public DataSource dataSource() {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("db.driver")));
         dataSource.setUrl(env.getProperty("db.url"));

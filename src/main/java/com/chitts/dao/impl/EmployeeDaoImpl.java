@@ -1,16 +1,16 @@
 package com.chitts.dao.impl;
 
-import com.chitts.exception.AppException;
-import com.chitts.exception.EmployeeDaoException;
-import com.chitts.models.impl.Employee;
+import com.chitts.dao.Dao;
+import com.chitts.dao.query.EmployeeSqlQuery;
+import com.chitts.dto.DtoEmployeeFull;
+import com.chitts.dto.DtoEmployeeShort;
+import com.chitts.exception.EntityNotFoundException;
+import com.chitts.models.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,99 +18,46 @@ import java.util.List;
  */
 
 @Component
-public class EmployeeDaoImpl implements Dao<Employee> {
+public class EmployeeDaoImpl implements Dao {
+
+
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private Connection connection;
+    public EmployeeDaoImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
 
     @Override
-    public void save(Employee employee) throws AppException {
+    public void save(Employee employee) {
 
-        final String sql = "INSERT into employees values (" +
-                employee.getEmployeeId() + "," +
-                employee.getFirstName() + "," +
-                employee.getLastName() + "," +
-                employee.getDepartmentId() + "," +
-                employee.getJobTitle() + "," +
-                employee.getGender() + ", '10/10/1998')";
-        try (final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.executeUpdate();
-        } catch (final SQLException throwable) {
-            throw new EmployeeDaoException("Check SQL query in Method *Save*", throwable);
-        }
+        jdbcTemplate.update(EmployeeSqlQuery.SAVE, employee.getFirstName(), employee.getLastName(),
+                employee.getDepartmentId(), employee.getJobTitle(), employee.getGender().toString(), employee.getDateOfBirth());
     }
 
     @Override
-    public List<Employee> getAll() throws EmployeeDaoException {
+    public List<DtoEmployeeShort> getAll() {
 
-        final List<Employee> models = new ArrayList<>();
-        try (final PreparedStatement preparedStatement = connection.prepareStatement(
-                "SELECT * FROM employees")) {
-            final ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                final Employee employee = new Employee();
-                employee.setEmployeeId(resultSet.getLong("employeeId"));
-                employee.setFirstName(resultSet.getString("firstName"));
-                employee.setLastName(resultSet.getString("lastName"));
-                employee.setDepartmentId(resultSet.getLong("departmentId"));
-                employee.setJobTitle(resultSet.getString("jobTitle"));
-                employee.setGender(resultSet.getString("gender"));
-                employee.setDateOfBirth(resultSet.getDate("dateOfBirth"));
-                models.add(employee);
-            }
-        } catch (final SQLException throwable) {
-            throw new EmployeeDaoException("Check SQL query in GenericDao.class.", throwable);
-        }
-        return models;
+        return jdbcTemplate.query(EmployeeSqlQuery.GET_ALL, new BeanPropertyRowMapper<>(DtoEmployeeShort.class));
     }
 
     @Override
-    public Employee getById(final long id) throws AppException {
+    public DtoEmployeeFull getById(final long id) throws EntityNotFoundException {
 
-        final Employee employee = new Employee();
-        try (final PreparedStatement preparedStatement = connection.prepareStatement(
-                "SELECT * FROM employees WHERE employeeid = " + id)) {
-            final ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                employee.setEmployeeId(resultSet.getLong("employeeId"));
-                employee.setFirstName(resultSet.getString("firstName"));
-                employee.setLastName(resultSet.getString("lastName"));
-                employee.setDepartmentId(resultSet.getLong("departmentId"));
-                employee.setJobTitle(resultSet.getString("jobTitle"));
-                employee.setGender(resultSet.getString("gender"));
-                employee.setDateOfBirth(resultSet.getDate("dateOfBirth"));
-            }
-        } catch (final SQLException throwable) {
-            throw new EmployeeDaoException("Check SQL query in GenericDao.class.", throwable);
-        }
-        return employee;
+        return jdbcTemplate.query(EmployeeSqlQuery.GET_BY_ID, new BeanPropertyRowMapper<>(DtoEmployeeFull.class), id)
+                .stream().findAny().orElseThrow(() -> new EntityNotFoundException(id));
     }
 
     @Override
-    public void update(final long id, Employee employee) throws AppException {
+    public void update(final long id, Employee employee) {
+        jdbcTemplate.update(EmployeeSqlQuery.UPDATE, employee.getFirstName(), employee.getLastName(),
+                employee.getDepartmentId(), employee.getJobTitle(), employee.getGender().toString(), employee.getDateOfBirth(), id);
 
-        String sql = " UPDATE employees SET employeeid=" + employee.getEmployeeId() +
-                ", firstname=" + employee.getFirstName() +
-                ",lastname =" + employee.getLastName() +
-                ",departmentid =" + employee.getDepartmentId() +
-                ", jobtitle =" + employee.getJobTitle() +
-                ",gender=" + employee.getGender() +
-                ",dateofbirth ='10/15/1987'" +
-                " WHERE employeeid=" + id;
-        try (final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.executeUpdate();
-        } catch (final SQLException throwable) {
-            throw new EmployeeDaoException("Check SQL query in Method *Save*", throwable);
-        }
     }
 
     @Override
-    public void delete(final long id) throws AppException {
-        try (final PreparedStatement preparedStatement = connection.prepareStatement(
-                "DELETE FROM employees WHERE  employeeid = " + id)) {
-            preparedStatement.executeUpdate();
-        } catch (SQLException throwable) {
-            throw new EmployeeDaoException("Check SQL in Method *delete*", throwable);
-        }
+    public void delete(final long id) {
+        jdbcTemplate.update(EmployeeSqlQuery.DELETE, id);
     }
 }
