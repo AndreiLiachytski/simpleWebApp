@@ -18,6 +18,4 @@ log/
 target/
 /out/
 /lib/
-/src/main/java/com/chitts/config/AppConfig.java
-/src/main/java/com/chitts/config/DataBaseInit.java
 /src/main/java/com/chitts/config/SwaggerConfig.java
