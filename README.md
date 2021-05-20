@@ -1,12 +1,13 @@
-### Practical task
 
-Using the provided skeleton, implement the REST service.
 
-Useful link: https://spring.io/guides/gs/rest-service/
+##This simple WebApp without UI is based on Spring and Tomcat.
+##It has next layers :
+###-Controllers
+###-Service
+###-DAO
+###-DTO
 
-In addition you could use Swagger to provide API documentation.
         
         
   
 
-# simpleWebApp
