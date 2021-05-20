@@ -3,9 +3,11 @@ package com.chitts.service.impl;
 import com.chitts.dao.impl.EmployeeDaoImpl;
 import com.chitts.dto.DtoEmployeeFull;
 import com.chitts.dto.DtoEmployeeShort;
-import com.chitts.exception.AppException;
+import com.chitts.exception.EntityNotFoundException;
 import com.chitts.models.Employee;
 import com.chitts.service.EmployeeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,8 @@ import java.util.List;
 
 @Component
 public class EmployeeServiceImpl implements EmployeeService {
+
+    private static final Logger log = LoggerFactory.getLogger("exception");
 
     private final EmployeeDaoImpl employeeDao;
 
@@ -37,8 +41,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public DtoEmployeeFull getById(final long id) throws AppException {
-        return employeeDao.getById(id);
+    public DtoEmployeeFull getById(final long id) {
+        DtoEmployeeFull dtoEmployeeFull = null;
+        try {
+            dtoEmployeeFull = employeeDao.getById(id);
+        } catch (EntityNotFoundException e) {
+            log.error("EmployeeServiceImpl exception ", e);
+        }
+        return dtoEmployeeFull;
     }
 
     @Override

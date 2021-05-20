@@ -20,14 +20,12 @@ import java.util.List;
 @Component
 public class EmployeeDaoImpl implements Dao {
 
-
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public EmployeeDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-
 
     @Override
     public void save(Employee employee) {
