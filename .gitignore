@@ -18,4 +18,4 @@ log/
 target/
 /out/
 /lib/
-/src/main/java/com/chitts/config/SwaggerConfig.java
+/logging/debug.log

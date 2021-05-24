@@ -1,4 +1,4 @@
-package com.chitts.exception;
+package com.chitts.exceptions;
 
 public class AppException extends Exception {
 
