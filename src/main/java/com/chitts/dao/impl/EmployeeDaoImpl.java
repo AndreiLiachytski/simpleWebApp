@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class EmployeeDaoImpl implements Dao {
+public final class EmployeeDaoImpl implements Dao {
 
     private final JdbcTemplate jdbcTemplate;
 
