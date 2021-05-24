@@ -4,7 +4,7 @@ import com.chitts.dao.Dao;
 import com.chitts.dao.query.EmployeeSqlQuery;
 import com.chitts.dto.DtoEmployeeFull;
 import com.chitts.dto.DtoEmployeeShort;
-import com.chitts.exception.EntityNotFoundException;
+import com.chitts.exceptions.EntityNotFoundException;
 import com.chitts.models.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -12,10 +12,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-
-/**
- * DAO - выполняетзапрос в базу данных(БД) (используйте Spring JDBC)
- */
 
 @Component
 public class EmployeeDaoImpl implements Dao {

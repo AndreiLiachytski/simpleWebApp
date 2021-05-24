@@ -3,7 +3,7 @@ package com.chitts.service.impl;
 import com.chitts.dao.impl.EmployeeDaoImpl;
 import com.chitts.dto.DtoEmployeeFull;
 import com.chitts.dto.DtoEmployeeShort;
-import com.chitts.exception.EntityNotFoundException;
+import com.chitts.exceptions.EntityNotFoundException;
 import com.chitts.models.Employee;
 import com.chitts.service.EmployeeService;
 import org.slf4j.Logger;
@@ -12,11 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-
-/**
- * Service - это сервис выполняющий бизнес-логику, в данном задании бизнес-логики практически нет,
- * и сервис просто делает вызов DAO (для DI используйте Spring)
- */
 
 @Component
 public class EmployeeServiceImpl implements EmployeeService {
@@ -46,7 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         try {
             dtoEmployeeFull = employeeDao.getById(id);
         } catch (EntityNotFoundException e) {
-            log.error("EmployeeServiceImpl exception ", e);
+            log.error(e.getMessage());
         }
         return dtoEmployeeFull;
     }

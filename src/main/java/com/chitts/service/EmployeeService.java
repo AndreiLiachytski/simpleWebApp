@@ -2,7 +2,7 @@ package com.chitts.service;
 
 import com.chitts.dto.DtoEmployeeFull;
 import com.chitts.dto.DtoEmployeeShort;
-import com.chitts.exception.AppException;
+import com.chitts.exceptions.AppException;
 import com.chitts.models.Employee;
 
 import java.util.List;
