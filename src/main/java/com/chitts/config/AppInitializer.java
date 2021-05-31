@@ -16,7 +16,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[]{AppInitializer.class, DataSourceConfig.class, DataBaseInit.class};
+        return new Class<?>[]{AppInitializer.class, DataSourceConfig.class};
     }
 
     @Override
@@ -30,13 +30,14 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
     }
 
     @Override
-    public void onStartup(ServletContext aServletContext) throws ServletException {
+    public void onStartup(final ServletContext aServletContext) throws ServletException {
         super.onStartup(aServletContext);
         registerHiddenFieldFilter(aServletContext);
     }
 
-    private void registerHiddenFieldFilter(ServletContext aContext) {
+    private void registerHiddenFieldFilter(final ServletContext aContext) {
         aContext.addFilter("hiddenHttpMethodFilter",
                 new HiddenHttpMethodFilter()).addMappingForUrlPatterns(null, true, "/*");
     }
+
 }

@@ -1,16 +1,14 @@
 package com.chitts.dto;
 
-import com.chitts.models.Gender;
+import com.chitts.model.Gender;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class DtoEmployeeFull {
 
     private long employeeId;

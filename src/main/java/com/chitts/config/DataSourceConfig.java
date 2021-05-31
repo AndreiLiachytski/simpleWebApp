@@ -12,18 +12,18 @@ import javax.sql.DataSource;
 import java.util.Objects;
 
 @Configuration
-@PropertySource({"classpath:dataBase.properties"})
+@PropertySource({"classpath:database.properties"})
 public class DataSourceConfig {
 
     private final Environment env;
 
     @Autowired
-    public DataSourceConfig(Environment env) {
+    public DataSourceConfig(final Environment env) {
         this.env = env;
     }
 
     @Bean
-    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+    public JdbcTemplate jdbcTemplate(final DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 
@@ -34,7 +34,7 @@ public class DataSourceConfig {
         dataSource.setUrl(env.getProperty("db.url"));
         dataSource.setUsername(env.getProperty("db.userName"));
         dataSource.setPassword(env.getProperty("db.password"));
-
         return dataSource;
     }
+
 }
