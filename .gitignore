@@ -18,4 +18,3 @@ log/
 target/
 /out/
 /lib/
-/logging/debug.log

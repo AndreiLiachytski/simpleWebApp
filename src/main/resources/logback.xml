@@ -4,45 +4,15 @@
         <resetJUL>true</resetJUL>
     </contextListener>
     <jmxConfigurator/>
-    <property name="LOG_HOME" value="H:/newFolder/logging"/>
 
-    <appender name="info" class="ch.qos.logback.core.FileAppender">
-        <file>${LOG_HOME}/info.log</file>
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">-->
         <encoder>
-            <pattern>%-5level %logger{0} - %msg %d{dd.MM.yyyy HH:mm:ss}%n</pattern>
-        </encoder>
-    </appender>
-    <appender name="exception" class="ch.qos.logback.core.FileAppender">
-        <file>${LOG_HOME}/exceptions.log</file>
-        <encoder>
-            <pattern>%-5level %logger{0} - %msg %d{dd.MM.yyyy HH:mm:ss}%n</pattern>
-        </encoder>
-    </appender>
-    <appender name="main" class="ch.qos.logback.core.FileAppender">
-        <file>${LOG_HOME}/main.log</file>
-        <encoder>
-            <pattern>%-5level %logger{0} - %msg %d{dd.MM.yyyy HH:mm:ss}%n</pattern>
-        </encoder>
-    </appender>
-    <appender name="debug" class="ch.qos.logback.core.FileAppender">
-        <file>${LOG_HOME}/debug.log</file>
-        <encoder>
-            <pattern>%-5level %logger{0} - %msg %d{dd.MM.yyyy HH:mm:ss}%n</pattern>
+            <Pattern>%d{HH:mm:ss.SSS} %blue(%-5level) %magenta(%logger{36}) - %msg %n</Pattern>
         </encoder>
     </appender>
 
-    <logger name="info" level="info" additivity="false">
-        <appender-ref ref="info"/>
-    </logger>
-    <logger name="debug" level="debug" additivity="false">
-        <appender-ref ref="debug"/>
-    </logger>
-    <logger name="exception" level="error" additivity="false">
-        <appender-ref ref="exception"/>
-    </logger>
-
-    <root level="all">
-        <appender-ref ref="main"/>
+    <root level="info">
+        <appender-ref ref="consoleAppender"/>
     </root>
 
 </configuration>
