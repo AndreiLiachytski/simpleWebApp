@@ -1,31 +1,29 @@
 package com.chitts.service.impl;
 
 import com.chitts.config.DataSourceTestConfig;
+import com.chitts.dao.exception.EmployeeDaoException;
 import com.chitts.dto.DtoEmployeeFull;
 import com.chitts.dto.DtoEmployeeShort;
-import com.chitts.model.Employee;
 import com.chitts.model.Gender;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {DataSourceTestConfig.class})
 @WebAppConfiguration
-@ActiveProfiles("test")
 @DisplayName("Integration Employee Service Test")
 @SqlGroup({
         @Sql(value = "classpath:db/test-data.sql",
@@ -33,8 +31,6 @@ import java.util.List;
         @Sql(value = "classpath:db/clean-up.sql",
                 executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
 public class EmployeeServiceImplTest {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeServiceImplTest.class);
 
     private final EmployeeServiceImpl employeeService;
 
@@ -45,8 +41,8 @@ public class EmployeeServiceImplTest {
 
     @Test
     @DisplayName("should delete Employee by id")
-    public void delete() {
-        LOGGER.info("TEST method: delete Employee");
+    public void delete() throws EmployeeDaoException {
+        log.info("TEST method: delete Employee");
         List<DtoEmployeeShort> employeesList = employeeService.getAll();
 
         Assertions.assertNotNull(employeesList);
@@ -58,8 +54,8 @@ public class EmployeeServiceImplTest {
 
     @Test
     @DisplayName("should return all Employees")
-    public void getAll() {
-        LOGGER.info("TEST method: get all Employees");
+    public void getAll() throws EmployeeDaoException {
+        log.info("TEST method: get all Employees");
         List<DtoEmployeeShort> employeeList = employeeService.getAll();
 
         Assertions.assertNotNull(employeeList);
@@ -68,8 +64,8 @@ public class EmployeeServiceImplTest {
 
     @Test
     @DisplayName("should return Employee by id")
-    public void getById() {
-        LOGGER.info("TEST method: get Employee by id");
+    public void getById() throws EmployeeDaoException {
+        log.info("TEST method: get Employee by id");
         DtoEmployeeFull employee = employeeService.getById(1);
 
         Assertions.assertEquals(employee.getFirstName(), "Bob");
@@ -81,18 +77,17 @@ public class EmployeeServiceImplTest {
 
     @Test
     @DisplayName("should save new Employee")
-    public void save() {
-        LOGGER.info("TEST method: save Employee");
-        final Employee employee = new Employee
+    public void save() throws EmployeeDaoException {
+        log.info("TEST method: save Employee");
+        final DtoEmployeeFull employee = new DtoEmployeeFull
                 (4,
                         "Dead",
                         "Pool",
                         2L,
                         "soldier",
                         Gender.MALE,
-                        new Date(10)
+                        LocalDate.now().minusDays(1)
                 );
-
         employeeService.save(employee);
         List<DtoEmployeeShort> employeeList = employeeService.getAll();
         Assertions.assertNotNull(employeeList);
@@ -101,14 +96,14 @@ public class EmployeeServiceImplTest {
 
     @Test
     @DisplayName("should update Employee by id")
-    public void update() {
-        LOGGER.info("TEST method: update Employee");
+    public void update() throws EmployeeDaoException {
+        log.info("TEST method: update Employee");
         final int id = 2;
         DtoEmployeeFull employeeForUpdating = employeeService.getById(id);
 
         employeeForUpdating.setFirstName("firstName");
         employeeForUpdating.setLastName("lastName");
-        employeeService.update(id, employeeForUpdating);
+        employeeService.update(employeeForUpdating);
         DtoEmployeeFull employeeAfterUpdating = employeeService.getById(id);
         Assertions.assertEquals(employeeAfterUpdating.getFirstName(), "firstName");
         Assertions.assertEquals(employeeAfterUpdating.getLastName(), "lastName");
