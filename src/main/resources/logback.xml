@@ -4,15 +4,12 @@
         <resetJUL>true</resetJUL>
     </contextListener>
     <jmxConfigurator/>
-
     <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">-->
         <encoder>
             <Pattern>%d{HH:mm:ss.SSS} %blue(%-5level) %magenta(%logger{36}) - %msg %n</Pattern>
         </encoder>
     </appender>
-
-    <root level="info">
+    <root level="all">
         <appender-ref ref="consoleAppender"/>
     </root>
-
 </configuration>

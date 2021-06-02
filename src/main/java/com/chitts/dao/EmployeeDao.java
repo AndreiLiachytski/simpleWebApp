@@ -1,22 +1,21 @@
 package com.chitts.dao;
 
+import com.chitts.dao.exception.EmployeeDaoException;
 import com.chitts.dto.DtoEmployeeFull;
 import com.chitts.dto.DtoEmployeeShort;
-import com.chitts.exception.AppException;
-import com.chitts.model.Employee;
 
 import java.util.List;
 
 public interface EmployeeDao {
 
-    void save(Employee employee);
+    long save(DtoEmployeeFull employee) throws EmployeeDaoException;
 
-    List<DtoEmployeeShort> getAll();
+    List<DtoEmployeeShort> getAll() throws EmployeeDaoException;
 
-    DtoEmployeeFull getById(long id) throws AppException;
+    DtoEmployeeFull getById(long id) throws EmployeeDaoException;
 
-    void update(long id, DtoEmployeeFull employee);
+    void update(DtoEmployeeFull employee) throws EmployeeDaoException;
 
-    void delete(long id);
+    void delete(long id) throws EmployeeDaoException;
 
 }

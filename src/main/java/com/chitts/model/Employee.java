@@ -1,13 +1,13 @@
 package com.chitts.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class Employee {
 
@@ -17,6 +17,6 @@ public class Employee {
     private Long departmentId;
     private String jobTitle;
     private Gender gender;
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
 }
