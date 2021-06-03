@@ -30,13 +30,13 @@ public class DataSourceConfig {
     }
 
     @Bean
-    public DataSource dataSource()   {
-            final DriverManagerDataSource dataSource = new DriverManagerDataSource();
-            dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("db.driver")));
-            dataSource.setUrl(env.getProperty("db.url"));
-            dataSource.setUsername(env.getProperty("db.userName"));
-            dataSource.setPassword(env.getProperty("db.password"));
-            return dataSource;
+    public DataSource dataSource() {
+        final DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("db.driver")));
+        dataSource.setUrl(env.getProperty("db.url"));
+        dataSource.setUsername(env.getProperty("db.userName"));
+        dataSource.setPassword(env.getProperty("db.password"));
+        return dataSource;
     }
 
 }
