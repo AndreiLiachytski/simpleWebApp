@@ -1,16 +1,23 @@
 package com.chitts.controller;
 
+import com.chitts.dao.exception.EmployeeDaoException;
 import com.chitts.dto.DtoEmployeeFull;
 import com.chitts.dto.DtoEmployeeShort;
-import com.chitts.model.Employee;
 import com.chitts.service.EmployeeService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/employees")
+@RequestMapping(value = "/employees")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -20,32 +27,55 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @PostMapping
-    public List<DtoEmployeeShort> save(@ModelAttribute("employee") final Employee employee) {
-        employeeService.save(employee);
-        return employeeService.getAll();
-    }
-
     @GetMapping
-    public List<DtoEmployeeShort> getAllEmployees() {
-        return employeeService.getAll();
+    @ApiOperation(value = "Get all employees")
+    public ResponseEntity<List<DtoEmployeeShort>> getAll() throws EmployeeDaoException {
+        return new ResponseEntity<>(employeeService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public DtoEmployeeFull getById(@PathVariable("id") final Long id) {
-        return employeeService.getById(id);
+    @ApiOperation(value = "Get employee by ID")
+    public ResponseEntity<DtoEmployeeFull> getById(@ApiParam(value = "ID for search employee", required = true)
+                                                   @PathVariable final long id) throws EmployeeDaoException {
+        return new ResponseEntity<>(employeeService.getById(id), HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
-    public List<DtoEmployeeShort> update(@ModelAttribute("employee") final DtoEmployeeFull employee,
-                                         @PathVariable("id") final Long id) {
-        employeeService.update(id, employee);
-        return employeeService.getAll();
+    @PostMapping
+    @ApiOperation(value = "Create new Employee")
+    public ResponseEntity<DtoEmployeeFull> save(@ApiParam(value = "New employee", required = true)
+                                                @ModelAttribute @Valid final DtoEmployeeFull employee,
+                                                final BindingResult bindingResult) throws EmployeeDaoException {
+        if (bindingResult.hasErrors()) {
+            final String errorMessage = "Error in method 'save'. Data is not valid: " + bindingResult.getModel();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMessage);
+        } else {
+            final long id = employeeService.save(employee);
+            return new ResponseEntity<>(employeeService.getById(id), HttpStatus.CREATED);
+        }
+    }
+
+    @PutMapping
+    @ApiOperation(value = "Update Employee")
+    public ResponseEntity<DtoEmployeeFull> update(@ApiParam(value = "Employee for update", required = true)
+                                                  @ModelAttribute @Valid final DtoEmployeeFull employee,
+                                                  final BindingResult bindingResult) throws EmployeeDaoException {
+        if (bindingResult.hasErrors()) {
+            final String errorMessage = "Error in method 'update'. Data is not valid: " + bindingResult.getModel();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMessage);
+        } else {
+            employeeService.update(employee);
+            final long id = employee.getEmployeeId();
+            return new ResponseEntity<>(employeeService.getById(id), HttpStatus.OK);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") final Long id) {
+    @ApiOperation(value = "Delete Employee by ID")
+    public ResponseEntity<String> delete(@ApiParam(value = "ID for delete employee", required = true)
+                                         @PathVariable final long id) throws EmployeeDaoException {
         employeeService.delete(id);
+        final String errorMessage = "Employee with id = " + id + " was deleted.";
+        return new ResponseEntity<>(errorMessage, HttpStatus.OK);
     }
 
 }

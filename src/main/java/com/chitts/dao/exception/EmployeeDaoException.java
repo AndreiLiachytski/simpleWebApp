@@ -1,11 +1,16 @@
 package com.chitts.dao.exception;
 
-public class EntityNotFoundException extends EmployeeDaoException {
+import com.chitts.exception.AppException;
+
+public class EmployeeDaoException extends AppException {
 
     private String message;
 
-    public EntityNotFoundException(final long id) {
-        this.message = "Entity with id = " + id + " does not exist. Check your request parameters";
+    public EmployeeDaoException() {
+    }
+
+    public EmployeeDaoException(final String message, final Throwable ex) {
+        super(message, ex);
     }
 
     @Override
@@ -17,4 +22,5 @@ public class EntityNotFoundException extends EmployeeDaoException {
     public void setMessage(final String message) {
         this.message = message;
     }
+
 }

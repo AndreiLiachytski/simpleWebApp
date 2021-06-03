@@ -26,7 +26,7 @@ public class DataSourceTestConfig {
     @Bean
     public DataSource dataSource() {
         try {
-            EmbeddedDatabaseBuilder databaseBuilder = new EmbeddedDatabaseBuilder();
+            final EmbeddedDatabaseBuilder databaseBuilder = new EmbeddedDatabaseBuilder();
             return databaseBuilder.setType(EmbeddedDatabaseType.H2).build();
         } catch (final Exception e) {
             log.error("Embedded DataSource bean cannot be created !", e);
