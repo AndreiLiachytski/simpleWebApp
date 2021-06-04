@@ -33,11 +33,9 @@ public class DataSourceConfig {
 
     @PostConstruct
     public void checkDataSource() {
-        jdbcTemplate(dataSource()).query
-                (
-                        "SELECT * FROM employees ORDER BY employee_id LIMIT 10",
-                        new BeanPropertyRowMapper<>(DtoEmployeeFull.class)
-                );
+        jdbcTemplate(dataSource()).query(
+                "SELECT * FROM employees ORDER BY employee_id LIMIT 10",
+                new BeanPropertyRowMapper<>(DtoEmployeeFull.class));
     }
 
 }
