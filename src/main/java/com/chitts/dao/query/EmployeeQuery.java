@@ -16,7 +16,7 @@ public class EmployeeQuery {
                     "job_title=?," +
                     "gender = CAST(? as gender)," +
                     "date_of_birth =?" +
-                        "WHERE employee_id =?";
+                    "WHERE employee_id =?";
 
     public static final String SAVE =
             "INSERT into employees(" +
@@ -26,5 +26,5 @@ public class EmployeeQuery {
                     "job_title," +
                     "gender," +
                     "date_of_birth)" +
-                        "values(?,?,?,?,CAST(? as gender),?)";
+                    "values(?,?,?,?,CAST(? as gender),?)";
 }

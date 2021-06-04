@@ -24,16 +24,16 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .build();
     }
 
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/docApi/swagger-ui.html**").addResourceLocations("classpath:/META-INF/resources/swagger-ui.html");
+        registry.addResourceHandler("/docApi/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+
     public void addViewControllers(final ViewControllerRegistry registry) {
         registry.addRedirectViewController("/docApi/v2/api-docs", "/v2/api-docs");
         registry.addRedirectViewController("/docApi/swagger-resources/configuration/ui", "/swagger-resources/configuration/ui");
         registry.addRedirectViewController("/docApi/swagger-resources/configuration/security", "/swagger-resources/configuration/security");
         registry.addRedirectViewController("/docApi/swagger-resources", "/swagger-resources");
-    }
-
-    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/docApi/swagger-ui.html**").addResourceLocations("classpath:/META-INF/resources/swagger-ui.html");
-        registry.addResourceHandler("/docApi/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
 }
