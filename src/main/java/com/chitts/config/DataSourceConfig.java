@@ -5,14 +5,12 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
-@Profile("dev")
 @Configuration
 public class DataSourceConfig {
 
@@ -27,7 +25,7 @@ public class DataSourceConfig {
         final HikariDataSource dataSource = new HikariDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setJdbcUrl("jdbc:postgresql://localhost:5432/first_db");
-        dataSource.setUsername("postgres1");
+        dataSource.setUsername("postgres");
         dataSource.setPassword("postgres");
         dataSource.setMaximumPoolSize(10);
         return dataSource;
