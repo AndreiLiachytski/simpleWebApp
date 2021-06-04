@@ -37,7 +37,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         jdbcTemplate.update
                 (
                         connection -> {
-                            PreparedStatement ps = connection.prepareStatement(
+                            final PreparedStatement ps = connection.prepareStatement(
                                     EmployeeQuery.SAVE,
                                     new String[]{"employee_id"});
                             ps.setString(1, employee.getFirstName());

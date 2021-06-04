@@ -1,42 +1,45 @@
 package com.chitts.config;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.chitts.dto.DtoEmployeeFull;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
-import java.util.Objects;
 
-@Slf4j
+@Profile("dev")
 @Configuration
-@PropertySource({"classpath:database.properties"})
 public class DataSourceConfig {
 
-    private final Environment env;
-
-    @Autowired
-    public DataSourceConfig(final Environment env) {
-        this.env = env;
-    }
-
     @Bean
+    @Lazy(false)
     public JdbcTemplate jdbcTemplate(final DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 
     @Bean
     public DataSource dataSource() {
-        final DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("db.driver")));
-        dataSource.setUrl(env.getProperty("db.url"));
-        dataSource.setUsername(env.getProperty("db.userName"));
-        dataSource.setPassword(env.getProperty("db.password"));
+        final HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setJdbcUrl("jdbc:postgresql://localhost:5432/first_db");
+        dataSource.setUsername("postgres1");
+        dataSource.setPassword("postgres");
+        dataSource.setMaximumPoolSize(10);
         return dataSource;
+    }
+
+    @PostConstruct
+    public void checkDataSource() {
+        jdbcTemplate(dataSource()).query
+                (
+                        "SELECT * FROM employees ORDER BY employee_id LIMIT 10",
+                        new BeanPropertyRowMapper<>(DtoEmployeeFull.class)
+                );
     }
 
 }
