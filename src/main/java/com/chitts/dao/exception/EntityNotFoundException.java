@@ -1,20 +1,14 @@
 package com.chitts.dao.exception;
 
-public class EntityNotFoundException extends EmployeeDaoException {
+import lombok.Getter;
 
-    private String message;
+@Getter
+public class EntityNotFoundException extends Exception {
+
+    private final String message;
 
     public EntityNotFoundException(final long id) {
-        this.message = "Entity with id = " + id + " does not exist. Check your request parameters";
+        this.message = "Entity with id = " + id + " does not exist. Check your request parameter";
     }
 
-    @Override
-    public String getMessage() {
-        return message;
-    }
-
-    @Override
-    public void setMessage(final String message) {
-        this.message = message;
-    }
 }

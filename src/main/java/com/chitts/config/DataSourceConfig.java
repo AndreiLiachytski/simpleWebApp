@@ -34,7 +34,7 @@ public class DataSourceConfig {
     @PostConstruct
     public void checkDataSource() {
         jdbcTemplate(dataSource()).query(
-                "SELECT * FROM employees ORDER BY employee_id LIMIT 10",
+                "SELECT  * FROM INFORMATION_SCHEMA.TABLES where TABLES.TABLE_NAME like 'EMPLOYEES'",
                 new BeanPropertyRowMapper<>(DtoEmployeeFull.class));
     }
 

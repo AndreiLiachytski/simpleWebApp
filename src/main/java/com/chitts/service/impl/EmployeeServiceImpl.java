@@ -1,6 +1,7 @@
 package com.chitts.service.impl;
 
 import com.chitts.dao.exception.EmployeeDaoException;
+import com.chitts.dao.exception.EntityNotFoundException;
 import com.chitts.dao.impl.EmployeeDaoImpl;
 import com.chitts.dto.DtoEmployeeFull;
 import com.chitts.dto.DtoEmployeeShort;
@@ -29,7 +30,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public DtoEmployeeFull getById(final long id) throws EmployeeDaoException {
+    public DtoEmployeeFull getById(final long id) throws EmployeeDaoException, EntityNotFoundException {
         return employeeDao.getById(id);
     }
 
@@ -39,7 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void delete(final long id) throws EmployeeDaoException {
+    public void delete(final long id) throws EmployeeDaoException, EntityNotFoundException {
         employeeDao.delete(id);
     }
 

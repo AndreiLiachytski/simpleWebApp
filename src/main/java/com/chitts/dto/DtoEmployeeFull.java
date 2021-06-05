@@ -19,13 +19,13 @@ import java.time.LocalDate;
 public class DtoEmployeeFull {
 
     private long employeeId;
-    @NotEmpty(message = "The firstName name must not be null")
+    @NotEmpty(message = "The firstName name must not be empty")
     private String firstName;
-    @NotEmpty(message = "The lastName name must not be null")
+    @NotEmpty(message = "The lastName name must not be empty")
     private String lastName;
-    @Range(min = 1, max = 100, message = "The departmentId name must not be null")
+    @Range(min = 1, max = 10, message = "The departmentId value must be between 1 and 10 inclusive")
     private long departmentId;
-    @NotEmpty(message = "The jobTitle name must not be null")
+    @NotEmpty(message = "The jobTitle must not be empty")
     private String jobTitle;
     @Enumerated(EnumType.STRING)
     private Gender gender;
