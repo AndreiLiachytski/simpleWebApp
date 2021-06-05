@@ -2,6 +2,7 @@ package com.chitts.service.impl;
 
 import com.chitts.config.DataSourceTestConfig;
 import com.chitts.dao.exception.EmployeeDaoException;
+import com.chitts.dao.exception.EntityNotFoundException;
 import com.chitts.dto.DtoEmployeeFull;
 import com.chitts.dto.DtoEmployeeShort;
 import com.chitts.model.Gender;
@@ -41,7 +42,7 @@ public class EmployeeServiceImplTest {
 
     @Test
     @DisplayName("should delete Employee by id")
-    public void delete() throws EmployeeDaoException {
+    public void delete() throws EmployeeDaoException, EntityNotFoundException {
         log.info("TEST method: delete Employee");
         final List<DtoEmployeeShort> employeesList = employeeService.getAll();
 
@@ -64,7 +65,7 @@ public class EmployeeServiceImplTest {
 
     @Test
     @DisplayName("should return Employee by id")
-    public void getById() throws EmployeeDaoException {
+    public void getById() throws EmployeeDaoException, EntityNotFoundException {
         log.info("TEST method: get Employee by id");
         final DtoEmployeeFull employee = employeeService.getById(1);
 
@@ -79,15 +80,15 @@ public class EmployeeServiceImplTest {
     @DisplayName("should save new Employee")
     public void save() throws EmployeeDaoException {
         log.info("TEST method: save Employee");
-        final DtoEmployeeFull employee = new DtoEmployeeFull
-                (4,
-                        "Dead",
-                        "Pool",
-                        2L,
-                        "soldier",
-                        Gender.MALE,
-                        LocalDate.now().minusDays(1)
-                );
+        final DtoEmployeeFull employee = new DtoEmployeeFull(
+                4,
+                "Dead",
+                "Pool",
+                2L,
+                "soldier",
+                Gender.MALE,
+                LocalDate.now().minusDays(1));
+
         employeeService.save(employee);
         final List<DtoEmployeeShort> employeeList = employeeService.getAll();
         Assertions.assertNotNull(employeeList);
@@ -96,7 +97,7 @@ public class EmployeeServiceImplTest {
 
     @Test
     @DisplayName("should update Employee by id")
-    public void update() throws EmployeeDaoException {
+    public void update() throws EmployeeDaoException, EntityNotFoundException {
         log.info("TEST method: update Employee");
         final int id = 2;
         final DtoEmployeeFull employeeForUpdating = employeeService.getById(id);

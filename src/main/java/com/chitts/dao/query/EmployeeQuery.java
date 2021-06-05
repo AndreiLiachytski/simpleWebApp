@@ -27,4 +27,5 @@ public class EmployeeQuery {
                     "gender," +
                     "date_of_birth)" +
                     "values(?,?,?,?,CAST(? as gender),?)";
+
 }

@@ -1,6 +1,7 @@
 package com.chitts.controller;
 
 import com.chitts.dao.exception.EmployeeDaoException;
+import com.chitts.dao.exception.EntityNotFoundException;
 import com.chitts.dto.DtoEmployeeFull;
 import com.chitts.dto.DtoEmployeeShort;
 import com.chitts.service.EmployeeService;
@@ -35,8 +36,8 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Get employee by ID")
-    public ResponseEntity<DtoEmployeeFull> getById(@ApiParam(value = "ID for search employee", required = true)
-                                                   @PathVariable final long id) throws EmployeeDaoException {
+    public ResponseEntity<DtoEmployeeFull> getById(@ApiParam(value = "ID for searching employee", required = true)
+                                                   @PathVariable final long id) throws EmployeeDaoException, EntityNotFoundException {
         return new ResponseEntity<>(employeeService.getById(id), HttpStatus.OK);
     }
 
@@ -44,7 +45,7 @@ public class EmployeeController {
     @ApiOperation(value = "Create new Employee")
     public ResponseEntity<DtoEmployeeFull> save(@ApiParam(value = "New employee", required = true)
                                                 @ModelAttribute @Valid final DtoEmployeeFull employee,
-                                                final BindingResult bindingResult) throws EmployeeDaoException {
+                                                final BindingResult bindingResult) throws EmployeeDaoException, EntityNotFoundException {
         if (bindingResult.hasErrors()) {
             final String errorMessage = "Error in method 'save'. Data is not valid: " + bindingResult.getModel();
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMessage);
@@ -58,7 +59,7 @@ public class EmployeeController {
     @ApiOperation(value = "Update Employee")
     public ResponseEntity<DtoEmployeeFull> update(@ApiParam(value = "Employee for update", required = true)
                                                   @ModelAttribute @Valid final DtoEmployeeFull employee,
-                                                  final BindingResult bindingResult) throws EmployeeDaoException {
+                                                  final BindingResult bindingResult) throws EmployeeDaoException, EntityNotFoundException {
         if (bindingResult.hasErrors()) {
             final String errorMessage = "Error in method 'update'. Data is not valid: " + bindingResult.getModel();
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMessage);
@@ -71,8 +72,8 @@ public class EmployeeController {
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete Employee by ID")
-    public ResponseEntity<String> delete(@ApiParam(value = "ID for delete employee", required = true)
-                                         @PathVariable final long id) throws EmployeeDaoException {
+    public ResponseEntity<String> delete(@ApiParam(value = "ID for deleting employee", required = true)
+                                         @PathVariable final long id) throws EmployeeDaoException, EntityNotFoundException {
         employeeService.delete(id);
         final String errorMessage = "Employee with id = " + id + " was deleted.";
         return new ResponseEntity<>(errorMessage, HttpStatus.OK);

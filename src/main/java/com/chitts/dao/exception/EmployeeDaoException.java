@@ -1,26 +1,12 @@
 package com.chitts.dao.exception;
 
-import com.chitts.exception.AppException;
+import lombok.Getter;
 
-public class EmployeeDaoException extends AppException {
-
-    private String message;
-
-    public EmployeeDaoException() {
-    }
-
+@Getter
+public class EmployeeDaoException extends Exception {
+    
     public EmployeeDaoException(final String message, final Throwable ex) {
         super(message, ex);
-    }
-
-    @Override
-    public String getMessage() {
-        return message;
-    }
-
-    @Override
-    public void setMessage(final String message) {
-        this.message = message;
     }
 
 }
