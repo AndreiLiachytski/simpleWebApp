@@ -1,47 +1,47 @@
 package com.chitts.service.impl;
 
 import com.chitts.dao.exception.EmployeeDaoException;
-import com.chitts.dao.exception.EntityNotFoundException;
+import com.chitts.dao.exception.EmployeeNotFoundException;
 import com.chitts.dao.impl.EmployeeDaoImpl;
-import com.chitts.dto.DtoEmployeeFull;
-import com.chitts.dto.DtoEmployeeShort;
 import com.chitts.service.EmployeeService;
-import org.springframework.stereotype.Component;
+import com.chitts.service.dto.employee.EmployeeFullDto;
+import com.chitts.service.dto.employee.EmployeeShortDto;
+import com.chitts.service.mapper.EmployeeMapper;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
+@AllArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeDaoImpl employeeDao;
+    private final EmployeeMapper mapper;
 
-    public EmployeeServiceImpl(final EmployeeDaoImpl employeeDao) {
-        this.employeeDao = employeeDao;
+    @Override
+    public long save(final EmployeeFullDto employee) throws EmployeeDaoException {
+        return employeeDao.save(mapper.map(employee));
     }
 
     @Override
-    public long save(final DtoEmployeeFull employee) throws EmployeeDaoException {
-        return employeeDao.save(employee);
+    public List<EmployeeShortDto> getAll() throws EmployeeDaoException {
+        return mapper.map(employeeDao.getAll());
     }
 
     @Override
-    public List<DtoEmployeeShort> getAll() throws EmployeeDaoException {
-        return employeeDao.getAll();
+    public EmployeeFullDto getById(final long id) throws EmployeeDaoException, EmployeeNotFoundException {
+        return mapper.map(employeeDao.getById(id));
     }
 
     @Override
-    public DtoEmployeeFull getById(final long id) throws EmployeeDaoException, EntityNotFoundException {
-        return employeeDao.getById(id);
+    public void update(final EmployeeFullDto employee) throws EmployeeDaoException, EmployeeNotFoundException {
+        employeeDao.update(mapper.map(employee));
     }
 
     @Override
-    public void update(final DtoEmployeeFull employee) throws EmployeeDaoException {
-        employeeDao.update(employee);
-    }
-
-    @Override
-    public void delete(final long id) throws EmployeeDaoException, EntityNotFoundException {
-        employeeDao.delete(id);
+    public long delete(final long id) throws EmployeeDaoException, EmployeeNotFoundException {
+        return employeeDao.delete(id);
     }
 
 }

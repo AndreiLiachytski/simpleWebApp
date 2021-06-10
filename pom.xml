@@ -20,13 +20,15 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
 
 
-        <tld.version>1.1.2</tld.version>
-        <!--        Jackson-->
-        <jackson-databind.version>2.12.3</jackson-databind.version>
+        <!--        MapStruct-->
+        <mapStruct.version>1.4.2.Final</mapStruct.version>
         <!--        Lombok-->
-        <lombok.version>1.18.18</lombok.version>
+        <lombok.version>1.18.20</lombok.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <!--        javax.servlet-->
         <javax.servlet.version>4.0.1</javax.servlet.version>
+        <!--        Jackson-->
+        <jackson-databind.version>2.12.3</jackson-databind.version>
         <!--        Spring-->
         <spring.version>5.3.3</spring.version>
         <!--        Database-->
@@ -34,8 +36,7 @@
         <postgresql.version>42.2.18</postgresql.version>
         <!--        Logging-->
         <taglibs.version>1.1.2</taglibs.version>
-        <!--        <slf4j.version>1.7.20</slf4j.version>-->
-        <slf4j.version>1.8.0-beta4</slf4j.version>
+        <slf4j.version>1.7.30</slf4j.version>
         <logback.version>1.1.7</logback.version>
         <!--        Validation-->
         <javax.validation.version>2.0.1.Final</javax.validation.version>
@@ -46,15 +47,18 @@
         <h2.version>1.4.200</h2.version>
         <junit.platform.version>1.8.0-M1</junit.platform.version>
         <jupiter.version>5.8.0-M1</jupiter.version>
+        <mockito-junit-jupiter.version>3.11.0</mockito-junit-jupiter.version>
+        <mockito-core.version>3.1.0</mockito-core.version>
         <!--        Swagger-->
         <swagger.version>2.9.2</swagger.version>
     </properties>
 
     <dependencies>
+
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson-databind.version}</version>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapStruct.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -67,6 +71,18 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.servlet.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!--        Jackson-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.12.3</version>
         </dependency>
 
         <!--        Spring  -->
@@ -128,12 +144,17 @@
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
+            <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
             <version>${logback.version}</version>
         </dependency>
 
@@ -173,6 +194,18 @@
             <version>${jupiter.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito-junit-jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito-core.version}</version>
+            <scope>test</scope>
+        </dependency>
 
         <!--        Swagger-->
         <dependency>
@@ -184,6 +217,11 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>1.4.2.Final</version>
         </dependency>
     </dependencies>
 
@@ -203,6 +241,34 @@
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.0</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                        <!-- See https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
+                        <!-- Classpath elements to supply as annotation processor path. If specified, the compiler   -->
+                        <!-- will detect annotation processors only in those classpath elements. If omitted, the     -->
+                        <!-- default classpath is used to detect annotation processors. The detection itself depends -->
+                        <!-- on the configuration of annotationProcessors.                                           -->
+                        <!--                                                                                         -->
+                        <!-- According to this documentation, the provided dependency processor is not considered!   -->
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                                <version>${mapStruct.version}</version>
+                            </path>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok.version}</version>
+                            </path>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok-mapstruct-binding</artifactId>
+                                <version>${lombok-mapstruct-binding.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -224,6 +290,3 @@
         </pluginManagement>
     </build>
 </project>
-
-
-
