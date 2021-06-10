@@ -1,14 +1,12 @@
 package com.chitts.service.impl;
 
 import com.chitts.config.DataSourceTestConfig;
+import com.chitts.dao.entity.Gender;
 import com.chitts.dao.exception.EmployeeDaoException;
-import com.chitts.dao.exception.EntityNotFoundException;
-import com.chitts.dto.DtoEmployeeFull;
-import com.chitts.dto.DtoEmployeeShort;
-import com.chitts.model.Gender;
-import lombok.extern.slf4j.Slf4j;
+import com.chitts.dao.exception.EmployeeNotFoundException;
+import com.chitts.service.dto.employee.EmployeeFullDto;
+import com.chitts.service.dto.employee.EmployeeShortDto;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,54 +19,60 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.time.LocalDate;
 import java.util.List;
 
-@Slf4j
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {DataSourceTestConfig.class})
 @WebAppConfiguration
-@DisplayName("Integration Employee Service Test")
 @SqlGroup({
         @Sql(value = "classpath:db/test-data.sql",
                 executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
         @Sql(value = "classpath:db/clean-up.sql",
                 executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)})
-public class EmployeeServiceImplTest {
+public class EmployeeServiceImpl_Integration_Test {
 
     private final EmployeeServiceImpl employeeService;
 
     @Autowired
-    public EmployeeServiceImplTest(final EmployeeServiceImpl employeeService) {
+    public EmployeeServiceImpl_Integration_Test(final EmployeeServiceImpl employeeService) {
         this.employeeService = employeeService;
     }
 
     @Test
-    @DisplayName("should delete Employee by id")
-    public void delete() throws EmployeeDaoException, EntityNotFoundException {
-        log.info("TEST method: delete Employee");
-        final List<DtoEmployeeShort> employeesList = employeeService.getAll();
-
+    public void delete() throws EmployeeDaoException, EmployeeNotFoundException {
+        //given
+        final List<EmployeeShortDto> employeesList = employeeService.getAll();
         Assertions.assertNotNull(employeesList);
+
+        //when
         employeeService.delete(3);
-        final List<DtoEmployeeShort> employeesListAfterDeleting = employeeService.getAll();
+
+        //then
+        final List<EmployeeShortDto> employeesListAfterDeleting = employeeService.getAll();
         Assertions.assertNotNull(employeesListAfterDeleting);
-        Assertions.assertEquals(employeesListAfterDeleting.size(), 2);
+        Assertions.assertEquals(employeesListAfterDeleting.size(), employeesList.size() - 1);
     }
 
     @Test
-    @DisplayName("should return all Employees")
     public void getAll() throws EmployeeDaoException {
-        log.info("TEST method: get all Employees");
-        final List<DtoEmployeeShort> employeeList = employeeService.getAll();
+        //given
+        final List<EmployeeShortDto> employeeList;
 
+        //when
+        employeeList = employeeService.getAll();
+
+        //then
         Assertions.assertNotNull(employeeList);
         Assertions.assertEquals(employeeList.size(), 3);
     }
 
     @Test
-    @DisplayName("should return Employee by id")
-    public void getById() throws EmployeeDaoException, EntityNotFoundException {
-        log.info("TEST method: get Employee by id");
-        final DtoEmployeeFull employee = employeeService.getById(1);
+    public void getById() throws EmployeeDaoException, EmployeeNotFoundException {
+        //given
+        final EmployeeFullDto employee;
 
+        //when
+        employee = employeeService.getById(1);
+
+        //then
         Assertions.assertEquals(employee.getFirstName(), "Bob");
         Assertions.assertEquals(employee.getLastName(), "Marley");
         Assertions.assertEquals(employee.getDepartmentId(), 2);
@@ -77,35 +81,42 @@ public class EmployeeServiceImplTest {
     }
 
     @Test
-    @DisplayName("should save new Employee")
     public void save() throws EmployeeDaoException {
-        log.info("TEST method: save Employee");
-        final DtoEmployeeFull employee = new DtoEmployeeFull(
-                4,
-                "Dead",
-                "Pool",
-                2L,
-                "soldier",
-                Gender.MALE,
-                LocalDate.now().minusDays(1));
+        //given
+        final List<EmployeeShortDto> employeeListBeforeSaveEmployee = employeeService.getAll();
+        final EmployeeFullDto employee = EmployeeFullDto
+                .builder()
+                .employeeId(4)
+                .firstName("Dead")
+                .firstName("Pool")
+                .departmentId(2)
+                .jobTitle("soldier")
+                .gender(Gender.MALE)
+                .dateOfBirth(LocalDate.now().minusDays(1))
+                .build();
 
+        //when
         employeeService.save(employee);
-        final List<DtoEmployeeShort> employeeList = employeeService.getAll();
+
+        //then
+        final List<EmployeeShortDto> employeeList = employeeService.getAll();
         Assertions.assertNotNull(employeeList);
-        Assertions.assertEquals(employeeList.size(), 4);
+        Assertions.assertEquals(employeeList.size(), employeeListBeforeSaveEmployee.size() + 1);
     }
 
     @Test
-    @DisplayName("should update Employee by id")
-    public void update() throws EmployeeDaoException, EntityNotFoundException {
-        log.info("TEST method: update Employee");
+    public void update() throws EmployeeDaoException, EmployeeNotFoundException {
+        //given
         final int id = 2;
-        final DtoEmployeeFull employeeForUpdating = employeeService.getById(id);
+        final EmployeeFullDto employeeForUpdating = employeeService.getById(id);
 
+        //when
         employeeForUpdating.setFirstName("firstName");
         employeeForUpdating.setLastName("lastName");
         employeeService.update(employeeForUpdating);
-        final DtoEmployeeFull employeeAfterUpdating = employeeService.getById(id);
+
+        //then
+        final EmployeeFullDto employeeAfterUpdating = employeeService.getById(id);
         Assertions.assertEquals(employeeAfterUpdating.getFirstName(), "firstName");
         Assertions.assertEquals(employeeAfterUpdating.getLastName(), "lastName");
     }

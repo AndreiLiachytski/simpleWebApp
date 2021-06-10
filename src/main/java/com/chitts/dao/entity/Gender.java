@@ -1,4 +1,4 @@
-package com.chitts.model;
+package com.chitts.dao.entity;
 
 public enum Gender {
     MALE,
