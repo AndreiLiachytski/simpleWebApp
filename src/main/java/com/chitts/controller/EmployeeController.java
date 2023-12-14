@@ -24,6 +24,7 @@ public class EmployeeController {
     @GetMapping
     @ApiOperation(value = "Get all employees")
     public List<EmployeeShortDto> getAll() throws EmployeeDaoException {
+        //sssss
         return employeeService.getAll();
     }
 
